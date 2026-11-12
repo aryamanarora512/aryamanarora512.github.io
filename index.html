@@ -1,0 +1,670 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aryaman Arora</title>
+<meta name="description" content="Aryaman Arora — math and computer science at Duke. I build software that coaches people.">
+<meta name="color-scheme" content="dark">
+
+<style>
+  :root{
+    --bg:#08090c;
+    --ink:#f3f5f8;
+    --ink-2:#b7bec9;
+    --ink-3:#7c8490;
+    --line:rgba(255,255,255,.08);
+    --line-2:rgba(255,255,255,.14);
+    --accent:#5b8def;--r-card:8px;--pad-card:0px;
+    --endurance:#4da3ff;
+    --strength:#ffb454;
+    --math:#b08cff;
+    --code:#4fe0b0;
+    --serif:-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+    --sans:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    --mono:ui-monospace, "SF Mono", SFMono-Regular, Menlo, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);color:var(--ink-2);
+    font-family:var(--sans);font-size:17px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:rgba(91,157,255,.35);color:#fff}
+
+  /* ---------- background layers ---------- */
+  .grid{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size:40px 40px;
+    -webkit-mask-image:radial-gradient(ellipse at 50% 30%, #000 20%, transparent 85%);
+            mask-image:radial-gradient(ellipse at 50% 30%, #000 20%, transparent 85%);
+  }
+  .glow{
+    position:fixed;z-index:0;pointer-events:none;
+    right:-12vw;bottom:-18vh;width:70vw;height:70vw;max-width:900px;max-height:900px;
+    background:radial-gradient(circle, rgba(60,110,230,.16), rgba(60,110,230,0) 62%);
+  }
+  #bg{position:fixed;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;transition:opacity .4s}
+  body.icons-off #bg{opacity:0}
+
+  /* ---------- layout ---------- */
+  .wrap{position:relative;z-index:2;width:min(720px, calc(100% - 40px));margin:0 auto;padding:44px 0 80px}
+  section{margin-top:128px}
+  h2{font-family:var(--sans);font-weight:600;font-size:26px;letter-spacing:-.01em;color:var(--ink)}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:30px}
+  .sec-head .aside{font-family:var(--mono);font-size:12.5px;color:var(--ink-3)}
+  .sec-head .aside a:hover{color:var(--ink)}
+
+  .ic{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+  /* ---------- top row ---------- */
+  .toprow{display:flex;align-items:flex-start;justify-content:space-between}
+  .avatar{
+    width:76px;height:76px;border-radius:20px;position:relative;overflow:hidden;
+    background:
+      radial-gradient(circle at 28% 22%, rgba(120,170,255,.55), transparent 55%),
+      linear-gradient(160deg,#1b2c52,#0b1222 70%);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.14), 0 10px 30px rgba(20,50,120,.25);
+    display:grid;place-items:center;
+  }
+  .avatar span{font-family:var(--serif);font-style:italic;font-size:32px;color:#eaf1ff;letter-spacing:-.02em}
+  .controls{display:flex;align-items:center;gap:22px;padding-top:6px;font-size:14.5px;color:var(--ink-3)}
+  .controls a:hover{color:var(--ink)}
+  .icon-btn{
+    width:36px;height:36px;border-radius:50%;display:grid;place-items:center;cursor:pointer;
+    background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--ink-2);
+    transition:background .2s,border-color .2s,color .2s;
+  }
+  .icon-btn:hover{background:rgba(255,255,255,.08);border-color:var(--line-2);color:var(--ink)}
+  .icon-btn[aria-pressed="true"]{color:var(--accent);border-color:rgba(91,157,255,.45)}
+  .icon-btn .ic{font-size:18px}
+
+  /* ---------- hero ---------- */
+  .hero{margin-top:46px}
+  .name{
+    font-family:var(--serif);font-weight:500;color:var(--ink);
+    font-size:clamp(54px, 11.5vw, 88px);line-height:1.02;letter-spacing:-.03em;
+  }
+  .name .last{position:relative;display:inline-block}
+  .pulse{position:absolute;left:0;right:0;bottom:-.16em;width:100%;height:.3em;overflow:visible}
+  .pulse path{
+    fill:none;stroke:var(--accent);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;
+    vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;
+    filter:drop-shadow(0 0 6px rgba(91,157,255,.8));
+    animation:draw 1.8s .5s cubic-bezier(.6,.1,.2,1) forwards, beat 3.2s 2.4s ease-in-out infinite;
+  }
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes beat{0%,100%{opacity:1}50%{opacity:.45}}
+  .tagline{margin-top:34px;font-size:clamp(19px,3.4vw,23px);line-height:1.45;color:var(--ink);font-weight:500;letter-spacing:-.012em;max-width:30em}
+  .tagline em{font-family:var(--serif);font-weight:400;font-size:1.08em;color:#fff}
+  .status{
+    margin-top:22px;display:inline-flex;align-items:center;gap:10px;
+    font-size:14px;color:var(--ink-2);padding:7px 14px 7px 12px;border-radius:99px;
+    background:rgba(255,255,255,.035);border:1px solid var(--line);
+  }
+  .status .dot{width:8px;height:8px;border-radius:50%;background:var(--code);box-shadow:0 0 0 0 rgba(79,224,176,.6);animation:ping 2.4s infinite}
+  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(79,224,176,.55)}70%,100%{box-shadow:0 0 0 9px rgba(79,224,176,0)}}
+
+  .links{margin-top:44px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 30px;font-size:16px;line-height:1.4;color:var(--ink-3)}
+  .links a,.links button{
+    font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0;
+    transition:color .2s;position:relative;
+  }
+  .links a:hover,.links button:hover{color:var(--ink)}
+  .links .primary{
+    color:#06090f;background:var(--ink);padding:6px 16px;border-radius:99px;font-weight:500;margin-right:6px;
+  }
+  .links .primary:hover{color:#06090f;background:#fff}
+
+  .legend{
+    margin-top:30px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;
+    font-family:var(--mono);font-size:12px;color:var(--ink-3);
+  }
+  .legend .lead{color:var(--ink-3);margin-right:4px}
+  .legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px}
+
+  /* ---------- right now list ---------- */
+  .now ul{list-style:none;display:grid;gap:26px}
+  .now li{display:flex;gap:16px;align-items:flex-start;font-size:18px;line-height:1.5;color:var(--ink-2)}
+  .now li .ic{margin-top:.28em;font-size:19px;color:var(--ink-3);transition:color .25s,transform .25s}
+  .now li:hover .ic{transform:scale(1.15) rotate(-6deg)}
+  .now li[data-c="endurance"]:hover .ic{color:var(--endurance)}
+  .now li[data-c="math"]:hover .ic{color:var(--math)}
+  .now li[data-c="code"]:hover .ic{color:var(--code)}
+  .now li[data-c="strength"]:hover .ic{color:var(--strength)}
+  .now b{color:var(--ink);font-weight:600}
+
+  /* ---------- projects ---------- */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:46px 28px}
+  .card{display:block;position:relative}
+  .card.featured{grid-column:1/-1}
+  .thumb{
+    position:relative;aspect-ratio:16/10;border-radius:16px;overflow:hidden;
+    background:#0c0f16;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);
+    transition:transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .35s;
+  }
+  .card.featured .thumb{aspect-ratio:2.35/1}
+  .thumb svg{width:100%;height:100%;display:block}
+  .thumb::after{ /* cursor spotlight */
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+    background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%), rgba(140,185,255,.18), transparent 70%);
+  }
+  .card:hover .thumb{transform:translateY(-4px);box-shadow:inset 0 0 0 1px rgba(120,170,255,.5), 0 18px 50px rgba(30,70,180,.25)}
+  .card:hover .thumb::after{opacity:1}
+  .card h3{margin-top:18px;font-size:19.5px;font-weight:500;color:var(--ink);letter-spacing:-.012em;display:flex;align-items:center;gap:8px}
+  .card h3 .arrow{opacity:0;transform:translate(-4px,4px);transition:.25s;color:var(--accent);font-size:16px}
+  .card:hover h3 .arrow{opacity:1;transform:none}
+  .card .kind{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:2px}
+  .card p{margin-top:10px;font-size:15px;line-height:1.55;color:var(--ink-3)}
+  .card.featured p{font-size:16px;max-width:36em}
+  .tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
+  .tags span{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);padding:3px 9px;border-radius:99px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+
+  /* ---------- principles ---------- */
+  .principles .lede{margin:-14px 0 30px;font-size:16px;color:var(--ink-3);max-width:34em}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .pcard{
+    padding:22px 22px 24px;border-radius:16px;background:rgba(255,255,255,.025);
+    border:1px solid var(--line);transition:border-color .3s,background .3s,transform .3s;
+  }
+  .pcard:hover{border-color:var(--line-2);background:rgba(255,255,255,.04);transform:translateY(-2px)}
+  .pcard .ic{font-size:22px;margin-bottom:14px}
+  .pcard[data-c="endurance"] .ic{color:var(--endurance)}
+  .pcard[data-c="math"] .ic{color:var(--math)}
+  .pcard[data-c="code"] .ic{color:var(--code)}
+  .pcard[data-c="strength"] .ic{color:var(--strength)}
+  .pcard h3{font-family:var(--serif);font-weight:500;font-size:23px;color:var(--ink);letter-spacing:-.015em;line-height:1.2}
+  .pcard p{margin-top:8px;font-size:14.5px;line-height:1.55;color:var(--ink-3)}
+
+  /* ---------- contact ---------- */
+  .contact h2.big{
+    font-family:var(--serif);font-weight:400;font-size:clamp(38px,8vw,60px);line-height:1.05;letter-spacing:-.03em;color:var(--ink);
+  }
+  .contact h2.big em{font-style:italic;color:var(--accent)}
+  .contact p{margin-top:22px;max-width:30em;font-size:18px;color:var(--ink-2)}
+  .contact .links{margin-top:34px}
+  footer{margin-top:110px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+
+  /* ---------- reveal ---------- */
+  .js .rv{opacity:0;transform:translateY(16px);transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1)}
+  .js .rv.in{opacity:1;transform:none}
+
+  /* ---------- small screens ---------- */
+  @media (max-width:640px){
+    body{font-size:16px}
+    .wrap{padding-top:28px}
+    section{margin-top:96px}
+    .controls .txt{display:none}
+    .cards,.pgrid{grid-template-columns:1fr}
+    .card.featured .thumb{aspect-ratio:16/10}
+    .now li{font-size:17px}
+    .links{gap:10px 22px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .pulse path{animation:none;stroke-dashoffset:0}
+    .status .dot{animation:none}
+    .js .rv{transition:none}
+  }
+
+  .name{font-weight:600;letter-spacing:-.035em}
+  .tagline{margin-top:26px;font-weight:500}
+  .status{margin-top:6px;font-size:18px;color:var(--ink-3);background:none;border:0;padding:0}
+  .links a,.links button{-webkit-tap-highlight-color:transparent;outline:none;background:none}
+  .links a:focus-visible,.links button:focus-visible{color:var(--ink);text-decoration:underline}
+  .links{margin-top:30px}
+  .thumb.ph{display:grid;place-items:center;background:rgba(255,255,255,.02);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);border-radius:16px}
+  .thumb.ph span{font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+  .card .desc{color:var(--ink-3);opacity:.7}
+  .wrap{padding-bottom:40px}
+  section{margin-top:72px}
+  footer{margin-top:72px;padding:0;height:0;border-top:1px solid var(--line)}
+
+  /* design contract: see DESIGN.md */
+  .name,.tagline,.card h3{text-wrap:balance}
+  .card p,.role{text-wrap:pretty}
+  .avatar{background:#15203a;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);border-radius:12px}
+  .avatar span{color:#e8efff}
+  .glow{display:none}
+  .thumb{border-radius:var(--r-card);transition:box-shadow .2s ease-out}
+  .thumb::after{display:none}
+  .card:hover .thumb{transform:none;box-shadow:inset 0 0 0 1.5px var(--accent)}
+  .card h3{margin-top:16px;transition:color .2s ease-out}
+  .card:hover h3{color:var(--accent)}
+  .card .role{margin-top:2px;font-size:15px;color:var(--ink-2)}
+  .card .date{font-size:14px;color:var(--ink-3)}
+  .card .desc{margin-top:10px}
+  .thumb.ph{border-radius:var(--r-card)}
+  .thumb.ph span{font-family:var(--sans);font-size:14px}
+  .icon-btn{transition:color .2s ease-out,border-color .2s ease-out}
+  .icon-btn:hover{background:rgba(255,255,255,.04)}
+  .icon-btn[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+  .icon-btn:focus-visible,.card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .links a:hover,.links button:hover{color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:5px;text-decoration-thickness:2px}
+  .links a:focus-visible,.links button:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px;text-decoration:none}
+  .links a:active,.links button:active{color:var(--accent)}
+  ::selection{background:rgba(91,141,239,.4)}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:no-preference){
+    .toprow,.name,.tagline,.status,.links{animation:rise .6s ease-out both}
+    .name{animation-delay:.06s}.tagline{animation-delay:.12s}.status{animation-delay:.18s}.links{animation-delay:.24s}
+  }
+  .avatar img{width:100%;height:100%;object-fit:cover;object-position:50% 28%;display:block}
+  .thumb img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+
+  .thumb.two{display:grid;grid-template-columns:1.55fr 1fr;gap:2px;background:#0c0f16}
+  .thumb.two img{min-width:0}
+  .card .note{margin-top:8px;font-size:13px;color:var(--ink-3)}
+  .card details.code{margin-top:14px}
+  .card details.code summary{cursor:pointer;font-size:14px;color:var(--ink-2);width:max-content;list-style:none}
+  .card details.code summary::-webkit-details-marker{display:none}
+  .card details.code summary:hover{color:var(--ink);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:5px;text-decoration-thickness:2px}
+  .card details.code summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
+  .card details.code pre{margin-top:10px;max-height:340px;overflow:auto;padding:14px 16px;border-radius:8px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);font-family:var(--mono);font-size:12px;line-height:1.55;color:var(--ink-2);text-wrap:nowrap}
+
+  .card.featured .thumb.two{aspect-ratio:2.32;grid-template-columns:1.67fr 1fr}
+  .thumb.two img{width:100%;height:100%;object-fit:cover}
+  @media (max-width:640px){
+    .card.featured .thumb.two{aspect-ratio:auto;grid-template-columns:1fr}
+    .thumb.two img{height:auto}
+  }
+</style>
+</head>
+<body>
+
+<!-- Icon sprite: single source of truth. The page uses these as <svg><use>, and the background canvas reads the same paths. -->
+<svg id="sprite" width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- endurance -->
+  <symbol id="i-swim" viewBox="0 0 24 24"><path d="M3 15c1.5-1.2 3-1.2 4.5 0s3 1.2 4.5 0 3-1.2 4.5 0 3 1.2 4.5 0"/><path d="M3 19.5c1.5-1.2 3-1.2 4.5 0s3 1.2 4.5 0 3-1.2 4.5 0 3 1.2 4.5 0"/><path d="M14.6 6.6a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0 -3.4 0"/><path d="M5 12.2l4.4-3.8 3.4 1.8 2.2-2"/></symbol>
+  <symbol id="i-bike" viewBox="0 0 24 24"><path d="M2 16.5a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0"/><path d="M15 16.5a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0"/><path d="M5.5 16.5L9 8.5h6.5l3 8"/><path d="M9 8.5l3.5 8"/><path d="M8 6.5h2.5"/></symbol>
+  <symbol id="i-run" viewBox="0 0 24 24"><path d="M14.4 4.6a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0 -3.4 0"/><path d="M15 9.6l-3.2 3 3 2.6-1.1 5"/><path d="M11.8 12.6L8 11.6l-1.6 2.3"/><path d="M15 9.6l3.1 2.4 2.2-.9"/><path d="M13.8 15.2l3.7 1.4.8 2.6"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12.5h4.5l2.2-6 3.6 11.5 2.6-8 1.8 2.5H22"/></symbol>
+  <symbol id="i-stopwatch" viewBox="0 0 24 24"><path d="M5 13.5a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M12 13.5V10"/><path d="M10 2.5h4"/><path d="M12 2.5v3.5"/><path d="M18 6l1.2-1.2"/></symbol>
+  <symbol id="i-mountain" viewBox="0 0 24 24"><path d="M2.5 19.5l6-10 3.5 5.5 2.5-3.5 7 8z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.2 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></symbol>
+  <!-- strength -->
+  <symbol id="i-barbell" viewBox="0 0 24 24"><path d="M6.5 7v10"/><path d="M3.5 9.5v5"/><path d="M17.5 7v10"/><path d="M20.5 9.5v5"/><path d="M6.5 12h11"/></symbol>
+  <symbol id="i-kettlebell" viewBox="0 0 24 24"><path d="M6 15a6 6 0 1 0 12 0a6 6 0 1 0 -12 0"/><path d="M8.5 10.6V8a3.5 3.5 0 0 1 7 0v2.6"/></symbol>
+  <symbol id="i-plate" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></symbol>
+  <!-- math -->
+  <symbol id="i-sigma" viewBox="0 0 24 24"><path d="M18 5H7l6 7-6 7h11"/></symbol>
+  <symbol id="i-pi" viewBox="0 0 24 24"><path d="M5 7.5h14"/><path d="M9 7.5c0 4-.5 8-2 11"/><path d="M15 7.5v9.5c0 1 .8 1.8 2 1.8"/></symbol>
+  <symbol id="i-integral" viewBox="0 0 24 24"><path d="M14.5 4.5c-2 0-3 1-3 3.2v8.6c0 2.2-1 3.2-3 3.2"/></symbol>
+  <symbol id="i-infinity" viewBox="0 0 24 24"><path d="M12 12c-1.8-2.6-3.4-3.8-5.2-3.8a3.8 3.8 0 0 0 0 7.6c1.8 0 3.4-1.2 5.2-3.8s3.4-3.8 5.2-3.8a3.8 3.8 0 0 1 0 7.6c-1.8 0-3.4-1.2-5.2-3.8"/></symbol>
+  <symbol id="i-sqrt" viewBox="0 0 24 24"><path d="M3 12.5l2.5-1.2 3.2 7.2L14 4.5h7"/></symbol>
+  <symbol id="i-sine" viewBox="0 0 24 24"><path d="M2 12c2-7 4-7 6 0s4 7 6 0 4-7 6 0"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9.5 3h5"/><path d="M10.5 3v6l-5 8.5a2 2 0 0 0 1.7 3h9.6a2 2 0 0 0 1.7-3l-5-8.5V3"/><path d="M8 14h8"/></symbol>
+  <!-- code -->
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M13.5 5l-3 14"/></symbol>
+  <symbol id="i-braces" viewBox="0 0 24 24"><path d="M8.5 4.5c-2 0-3 1-3 3v2c0 1.2-.8 2-2 2.5 1.2.5 2 1.3 2 2.5v2c0 2 1 3 3 3"/><path d="M15.5 4.5c2 0 3 1 3 3v2c0 1.2.8 2 2 2.5-1.2.5-2 1.3-2 2.5v2c0 2-1 3-3 3"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M4 7l5 5-5 5"/><path d="M12 18h8"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M8 3h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M10.5 18h3"/></symbol>
+  <symbol id="i-graph" viewBox="0 0 24 24"><path d="M3.4 6a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M3.4 18a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M10.4 12a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M17.4 6a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M17.4 18a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M6.3 7.1l4.2 3.8M6.3 16.9l4.2-3.8M13.5 11l4.2-3.8M13.5 13l4.2 3.8"/></symbol>
+  <symbol id="i-branch" viewBox="0 0 24 24"><path d="M3.5 18a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"/><path d="M15.5 6a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"/><path d="M6 3.5v12"/><path d="M18 8.5c0 5-6 4-12 7"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><path d="M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3z"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 4v16h18"/><path d="M7 15c3-.5 4-6 7.5-7s4.5 3 6 2.5"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.5A8 8 0 1 1 9.5 4.5a6.5 6.5 0 0 0 10 10z"/></symbol>
+  <!-- ui -->
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><path d="M9.5 12a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.7A9.6 9.6 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a16 16 0 0 1-2.6 3.3M6.2 7.2A16 16 0 0 0 2.5 12S6 18.5 12 18.5a9.6 9.6 0 0 0 4-.9"/><path d="M9.9 9.9a2.5 2.5 0 0 0 3.2 3.2"/></symbol>
+</svg>
+
+<div class="grid" aria-hidden="true"></div>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<main class="wrap">
+
+  <!-- top row -->
+  <div class="toprow">
+    <div class="avatar"><img src="assets/aryaman.webp" alt="Aryaman Arora" width="76" height="76"></div>
+    <nav class="controls" aria-label="Primary">
+      <button class="icon-btn" id="toggleBg" aria-pressed="true" aria-label="Background icons: on" title="Background icons">
+        <svg class="ic"><use href="#i-graph"/></svg>
+      </button>
+    </nav>
+  </div>
+
+  <!-- hero -->
+  <header class="hero">
+    <h1 class="name">Aryaman Arora</h1>
+    <p class="tagline">CS + Math @ Duke University.</p>
+
+    <nav class="links" aria-label="Links">
+      <a href="#" data-soon>Resume</a>
+      <a href="#" data-soon>GitHub</a>
+      <a href="#" data-soon>LinkedIn</a>
+      <button type="button" id="copyEmail">Copy email</button>
+    </nav>
+
+    </header>
+
+  <!-- right now -->
+  
+
+  <!-- projects -->
+  <section id="projects">
+    <div class="cards">
+      <a class="card featured" href="#" data-soon>
+        <div class="thumb"><img src="assets/lea-firm-discovery.jpg" alt="Firm discovery tool: search by city and practice area, with ranked law-firm results" loading="lazy"></div>
+        <h3>Python firm sourcing tool </h3>
+        <div class="role">Data Analytics Intern at Legal Enterprises of America</div>
+        <div class="date">May – Aug 2026</div>
+        <p class="desc">Law-firm acquisition screening was manual and slow. I wrote the product requirements with the deal team, then built a Python scoring model that ranks 2,000 firms on 70 attributes and serves the results through a REST API, with dashboards that prioritize targets and forecast settlements. Review time per firm fell 40% and deal-sourcing volume rose 35%.</p>
+      </a>
+      <a class="card" href="#" data-soon>
+        <div class="thumb"><svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" font-family="-apple-system, BlinkMacSystemFont, Helvetica Neue, sans-serif"><rect width="320" height="200" fill="#0c0f16"/><rect x="16" y="40" width="88" height="46" rx="6" fill="#ffffff" fill-opacity=".04" stroke="#ffffff" stroke-opacity=".16"/><text x="25" y="59" fill="#f3f5f8" font-size="11" font-weight="600">Documents</text><text x="25" y="74" fill="#9aa3b0" font-size="8.5">5 file types</text><rect x="116" y="40" width="88" height="46" rx="6" fill="#ffffff" fill-opacity=".04" stroke="#ffffff" stroke-opacity=".16"/><text x="125" y="59" fill="#f3f5f8" font-size="11" font-weight="600">Chunks</text><text x="125" y="74" fill="#9aa3b0" font-size="8.5">by size</text><rect x="216" y="40" width="88" height="46" rx="6" fill="#5b8def" fill-opacity=".14" stroke="#5b8def"/><text x="225" y="59" fill="#f3f5f8" font-size="11" font-weight="600">Embeddings</text><text x="225" y="74" fill="#9aa3b0" font-size="8.5">MiniLM, 384 dims</text><rect x="216" y="120" width="88" height="46" rx="6" fill="#5b8def" fill-opacity=".14" stroke="#5b8def"/><text x="225" y="139" fill="#f3f5f8" font-size="11" font-weight="600">FAISS index</text><text x="225" y="154" fill="#9aa3b0" font-size="8.5">top 5 matches</text><rect x="116" y="120" width="88" height="46" rx="6" fill="#ffffff" fill-opacity=".04" stroke="#ffffff" stroke-opacity=".16"/><text x="125" y="139" fill="#f3f5f8" font-size="11" font-weight="600">Local model</text><text x="125" y="154" fill="#9aa3b0" font-size="8.5">gpt-oss 120B</text><rect x="16" y="120" width="88" height="46" rx="6" fill="#ffffff" fill-opacity=".04" stroke="#ffffff" stroke-opacity=".16"/><text x="25" y="139" fill="#f3f5f8" font-size="11" font-weight="600">Answer</text><text x="25" y="154" fill="#9aa3b0" font-size="8.5">cites sources</text><path d="M104 63H114M110 59l4 4-4 4" fill="none" stroke="#7c8490" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M204 63H214M210 59l4 4-4 4" fill="none" stroke="#7c8490" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M260 86V118M256 114l4 4 4-4" fill="none" stroke="#7c8490" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M214 143H204M208 139l-4 4 4 4" fill="none" stroke="#7c8490" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M114 143H104M108 139l-4 4 4 4" fill="none" stroke="#7c8490" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>LLM compression and RAG agent</h3>
+        <div class="role">Machine Learning Researcher at Hickey Lab, Duke University</div>
+        <div class="date">Oct 2025 – May 2026</div>
+        <p class="desc">A research assistant for a collection of T-cell documents. It extracts text from PDFs, spreadsheets, slides and Word files, embeds the chunks with a MiniLM sentence model, and stores them in a FAISS index. A question pulls the five closest passages into a prompt, and a language model served locally through Ollama answers with the source file and chunk named; every query is logged. A scope-plan-answer-review prompt keeps longer outputs, such as grant drafts, structured. A separate pipeline compresses model weights to 4 bits to cut inference cost and memory use.</p>
+      </a>
+      <a class="card" href="#" data-soon>
+        <div class="thumb ph"><span>Image goes here</span></div>
+        <h3>Client onboarding data pipeline</h3>
+        <div class="role">Data Analytics Intern at Big Idea Technologies</div>
+        <div class="date">May – Jul 2025</div>
+        <p class="desc">Description coming soon.</p>
+      </a>
+      <div class="card featured">
+        <div class="thumb two"><img src="assets/selco-site-ranking.png" alt="Ranked bar chart of 15 candidate sites by predicted solar potential, with feature importances (synthetic sample data)" loading="lazy"><img src="assets/selco-outreach.jpg" alt="A solar dryer, a solar-powered milking machine, and a battery and inverter setup" loading="lazy"></div>
+        <h3>Solar site assessment tools</h3>
+        <div class="role">Software Engineer at Selco Foundation</div>
+        <div class="date">Jun – Aug 2023</div>
+        <p class="desc">Farmers without reliable grid access need to know where solar equipment will pay off. I built location-analysis and monitoring tools to assess 15 solar sites, then trained a random forest on geological and meteorological data to help decide where to deploy installations. Seaborn charts compared each location's solar potential for farmers. The work helped two rural farmers in the Gopalaiah region access solar farming tools through Selco.</p>
+        <p class="note">Photos: the solar dryer, solar milking machine and battery setup used to help two rural farmers. The chart is a synthetic sample, not field data.</p>
+        <details class="code"><summary>View the code</summary><pre><code>&quot;&quot;&quot;Rank candidate farm sites by solar potential.
+
+Illustrative sample: all data below is synthetic. It shows the shape of the
+analysis (feature engineering -&gt; random forest -&gt; Seaborn comparison), not
+real measurements.
+&quot;&quot;&quot;
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
+
+rng = np.random.default_rng(7)
+
+# 1. Synthetic training grid: geological + meteorological features per cell.
+n = 600
+cells = pd.DataFrame({
+    &quot;irradiance&quot;: rng.normal(5.6, 0.5, n),         # kWh/m2/day
+    &quot;cloud_cover&quot;: rng.uniform(10, 70, n),         # %
+    &quot;temperature&quot;: rng.normal(27, 3, n),           # deg C
+    &quot;rainfall&quot;: rng.uniform(300, 1200, n),         # mm/yr
+    &quot;slope&quot;: rng.gamma(2.0, 2.5, n),               # degrees
+    &quot;elevation&quot;: rng.normal(900, 120, n),          # m
+})
+cells[&quot;potential&quot;] = (
+    cells.irradiance * 0.92
+    - cells.cloud_cover * 0.012
+    - np.abs(cells.temperature - 25) * 0.015
+    - cells.slope * 0.04
+    + rng.normal(0, 0.08, n)
+)
+
+X, y = cells.drop(columns=&quot;potential&quot;), cells[&quot;potential&quot;]
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.25, random_state=7)
+
+# 2. Random forest on the training grid.
+model = RandomForestRegressor(n_estimators=300, min_samples_leaf=3, random_state=7)
+model.fit(X_tr, y_tr)
+print(f&quot;held-out R^2: {r2_score(y_te, model.predict(X_te)):.2f}&quot;)
+
+# 3. Score 15 candidate sites and rank them.
+sites = X.sample(15, random_state=3).reset_index(drop=True)
+sites.insert(0, &quot;site&quot;, [f&quot;Site {i:02d}&quot; for i in range(1, 16)])
+sites[&quot;predicted&quot;] = model.predict(sites.drop(columns=&quot;site&quot;))
+sites = sites.sort_values(&quot;predicted&quot;, ascending=False)
+
+importance = (
+    pd.Series(model.feature_importances_, index=X.columns)
+    .sort_values(ascending=False)
+)
+
+# 4. Plot: ranked sites + what drives the ranking.
+INK, MUTED, BG, ACCENT = &quot;#f3f5f8&quot;, &quot;#7c8490&quot;, &quot;#08090c&quot;, &quot;#5b8def&quot;
+sns.set_theme(style=&quot;white&quot;, rc={
+    &quot;font.family&quot;: [&quot;Helvetica Neue&quot;, &quot;Helvetica&quot;, &quot;Arial&quot;, &quot;DejaVu Sans&quot;],
+    &quot;figure.facecolor&quot;: BG, &quot;axes.facecolor&quot;: BG, &quot;axes.edgecolor&quot;: BG,
+    &quot;text.color&quot;: INK, &quot;axes.labelcolor&quot;: MUTED,
+    &quot;xtick.color&quot;: MUTED, &quot;ytick.color&quot;: INK,
+})
+
+fig, (ax1, ax2) = plt.subplots(
+    1, 2, figsize=(8, 5), gridspec_kw={&quot;width_ratios&quot;: [1.7, 1], &quot;wspace&quot;: 0.55}
+)
+
+shade = sns.blend_palette([ACCENT, &quot;#2b3f6b&quot;], n_colors=len(sites))
+sns.barplot(data=sites, y=&quot;site&quot;, x=&quot;predicted&quot;, hue=&quot;site&quot;, palette=shade,
+            legend=False, ax=ax1, width=0.72, linewidth=0)
+ax1.set_xlim(0, sites.predicted.max() * 1.05)   # bars start at zero
+ax1.set(xlabel=&quot;Predicted solar potential (relative)&quot;, ylabel=&quot;&quot;)
+ax1.set_title(&quot;Candidate sites, ranked&quot;, loc=&quot;left&quot;, fontsize=11,
+              fontweight=&quot;bold&quot;, color=INK, pad=10)
+
+sns.barplot(x=importance.values, y=importance.index, color=ACCENT, ax=ax2, width=0.55, linewidth=0)
+ax2.set(xlabel=&quot;Share of model decision&quot;, ylabel=&quot;&quot;)
+ax2.set_title(&quot;What drives it&quot;, loc=&quot;left&quot;, fontsize=11,
+              fontweight=&quot;bold&quot;, color=INK, pad=10)
+
+for ax in (ax1, ax2):
+    sns.despine(ax=ax, left=True, bottom=True)
+    ax.tick_params(length=0, labelsize=8)
+    ax.xaxis.grid(True, color=&quot;#ffffff&quot;, alpha=0.06)
+    ax.set_axisbelow(True)
+    ax.xaxis.label.set_size(8)
+
+fig.text(0.04, 0.02, &quot;Illustrative sample with synthetic data&quot;, fontsize=7, color=MUTED)
+fig.savefig(&quot;solar_site_ranking.png&quot;, dpi=200, bbox_inches=&quot;tight&quot;,
+            facecolor=BG, pad_inches=0.3)
+</code></pre></details>
+      </div>
+      <a class="card" href="#" data-soon>
+        <div class="thumb"><img src="assets/chargeplan-wireframe.jpg" alt="Wireframe of the planner: setup on the left, verdict, cost and charging chart on the right" loading="lazy"></div>
+        <h3>EV fleet charging planner</h3>
+        <div class="role">Selco Foundation extended project</div>
+        <div class="date">2026</div>
+        <p class="desc">A Python engine that schedules EV charging to minimize modeled energy cost while every vehicle leaves on time and the fleet stays under a shared power limit. A React and FastAPI app turns vehicle requirements and electricity tariffs into charging schedules, readiness summaries and an interactive chart. In the sample run, both vans are ready by departure for $4.80 instead of $12.00 when charging on arrival. Scenario analysis shows how prices, charge capacity and departure times change fleet readiness.</p>
+      </a>
+      <a class="card" href="#" data-soon>
+        <div class="thumb ph"><span>Image goes here</span></div>
+        <h3>Systematic Trading Engine </h3>
+        <div class="role">Duke FinTech Society</div>
+        <div class="date">Jan 2026</div>
+        <p class="desc">Description coming soon.</p>
+      </a>
+      <a class="card" href="#" data-soon>
+        <div class="thumb ph"><span>Image goes here</span></div>
+        <h3>Multisport Analytics Platform</h3>
+        <div class="role">Baseline</div>
+        <div class="date">Jan 2026</div>
+        <p class="desc">A full-stack training app for recreational triathletes. It imports FIT and CSV recordings, compares training blocks against benchmarks, and traces every insight back to the data behind it. Django and PostgreSQL on the backend, a SwiftUI iPhone app on the front, and a coach that answers from the athlete's own plan and recordings.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- how I build -->
+  
+
+  <!-- contact -->
+  
+
+  <footer ></footer>
+</main>
+
+<script>
+document.documentElement.classList.add('js');
+
+/* ---------- small helpers ---------- */
+document.querySelectorAll('[data-soon]').forEach(a=>a.addEventListener('click',e=>e.preventDefault()));
+
+[['copyEmail'],['copyEmail2']].forEach(([id])=>{
+  const b = document.getElementById(id); if(!b) return;
+  const label = b.textContent;
+  b.addEventListener('click', async ()=>{
+    try{ await navigator.clipboard.writeText('your-email@example.com'); }catch(e){}
+    b.textContent = 'Email copied';
+    setTimeout(()=>b.textContent = label, 1600);
+  });
+});
+
+/* ---------- the icon sky ---------- */
+(function(){
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const btn = document.getElementById('toggleBg');
+
+  const RGB = {
+    endurance:[91,141,239], strength:[91,141,239], math:[91,141,239], code:[91,141,239]
+  };
+  const REST = [150,158,172];
+  const CATS = {
+    endurance:['swim','bike','run','pulse','stopwatch','mountain','heart'],
+    strength:['barbell','kettlebell','plate','barbell','kettlebell'],
+    math:['sigma','pi','integral','infinity','sqrt','sine','flask'],
+    code:['code','braces','terminal','chip','phone','graph','branch','database','chart','moon']
+  };
+
+  // Build shapes from the sprite so the page and the canvas share one set of paths.
+  const shapes = [];
+  for(const cat in CATS){
+    for(const id of CATS[cat]){
+      const sym = document.getElementById('i-'+id);
+      if(!sym) continue;
+      const paths = [...sym.querySelectorAll('path')].map(p=>new Path2D(p.getAttribute('d')));
+      shapes.push({cat, paths, rgb:RGB[cat]});
+    }
+  }
+
+  let W=0,H=0,DPR=1, icons=[], on=true, rafId=0, t=0, last=0;
+  let column = {l:0, r:0};               // content column bounds: icons dim a little over the text
+  const ptr = {x:-1e4,y:-1e4,seen:false,down:false};
+  const cur = {x:0,y:0,s:0};            // smoothed spotlight
+  const rand = (a,b)=>a+Math.random()*(b-a);
+
+  function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+  function resize(force){
+    const nw = innerWidth, nh = innerHeight;
+    const bigChange = force || Math.abs(nw-W)>2 || Math.abs(nh-H)>160;
+    DPR = Math.min(2, devicePixelRatio||1);
+    W = nw; H = nh;
+    canvas.width = Math.round(W*DPR); canvas.height = Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    const wr = document.querySelector('.wrap').getBoundingClientRect();
+    column = {l:wr.left, r:wr.right};
+    if(bigChange) seed();
+  }
+
+  function seed(){
+    const n = Math.max(46, Math.min(96, Math.round(W*H/17000)));
+    const bag = shuffle(shapes.slice());
+    icons = [];
+    for(let i=0;i<n;i++){
+      let x,y,tries=0;
+      do{ x=rand(0,W); y=rand(0,H); tries++; }
+      while(tries<30 && icons.some(o=>Math.hypot(o.x-x,o.y-y)<74));
+      const depth = rand(.6,1.5);
+      icons.push({
+        shape: bag[i % bag.length],
+        x, y, depth,
+        size: 19 + depth*10,
+        vx: rand(-4,4)*depth, vy: rand(-9,-3)*depth,   // px/s, drifting gently upward
+        rot: rand(-.5,.5), vr: rand(-.06,.06),
+        ph: rand(0,6.28), tw: rand(.4,1.1)
+      });
+    }
+  }
+
+  function draw(p){
+    ctx.clearRect(0,0,W,H);
+    const R = 230;
+    const sy = reduce ? 0 : scrollY;
+    const lit = [];
+    for(const o of icons){
+      const wrap = H+80;
+      let dy = ((o.y - sy*.14*o.depth) % wrap + wrap) % wrap - 40;
+      const d = Math.hypot(o.x-cur.x, dy-cur.y);
+      let k = Math.max(0, 1 - d/R); k = k*k*(3-2*k) * cur.s;      // smoothstep
+      // dim resting icons over the text column (smoothly, so nothing pops as it drifts)
+      const edge = Math.min(o.x-column.l, column.r-o.x);
+      const q = Math.max(0, Math.min(1, (edge+30)/70));
+      const dim = 1 - (W<700 ? .3 : .5) * (q*q*(3-2*q));
+      const base = (.2 + (reduce?0:.07*Math.sin(o.ph + t*o.tw))) * dim;
+      const a = Math.min(.62, base + k*.62);
+      const mix = k;
+      const c = o.shape.rgb;
+      const col = `rgba(${Math.round(REST[0]+(c[0]-REST[0])*mix)},${Math.round(REST[1]+(c[1]-REST[1])*mix)},${Math.round(REST[2]+(c[2]-REST[2])*mix)},${a})`;
+      const s = o.size * (1 + k*.28);
+      if(k>.08) lit.push({x:o.x,y:dy,k,c});
+      ctx.save();
+      ctx.translate(o.x, dy);
+      ctx.rotate(o.rot);
+      const sc = s/24;
+      ctx.scale(sc,sc);
+      ctx.translate(-12,-12);
+      ctx.lineWidth = 1.5/sc;
+      ctx.lineCap='round'; ctx.lineJoin='round';
+      ctx.strokeStyle = col;
+      for(const path of o.shape.paths) ctx.stroke(path);
+      ctx.restore();
+    }
+  }
+
+  function tick(now){
+    const dt = Math.min(.05,(now-last)/1000||0); last = now; t += dt;
+    // spotlight target: the pointer if we've seen one, otherwise a slow ghost wandering the page
+    let tx, ty, ts;
+    if(ptr.seen){ tx=ptr.x; ty=ptr.y; ts=1; }
+    else{ tx = W*(.5+.36*Math.sin(t*.21)); ty = H*(.46+.3*Math.sin(t*.29+1.2)); ts=.8; }
+    const e = 1 - Math.pow(.0008, dt);
+    cur.x += (tx-cur.x)*e; cur.y += (ty-cur.y)*e; cur.s += (ts-cur.s)*e;
+    if(!reduce){
+      for(const o of icons){
+        o.x += o.vx*dt; o.y += o.vy*dt; o.rot += o.vr*dt;
+        if(o.x<-30) o.x=W+30; if(o.x>W+30) o.x=-30;
+        if(o.y<-30) o.y=H+30; if(o.y>H+30) o.y=-30;   // wrapped in draw() too, for scroll parallax
+      }
+    }
+    draw();
+    if(on) rafId = requestAnimationFrame(tick);
+  }
+
+  function start(){ on=true; last=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(tick); }
+  function stop(){ on=false; cancelAnimationFrame(rafId); }
+
+  addEventListener('pointermove', e=>{ ptr.x=e.clientX; ptr.y=e.clientY; ptr.seen=true; }, {passive:true});
+  document.documentElement.addEventListener('pointerleave', ()=>{ ptr.seen=false; });
+  let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>resize(false),120); });
+
+  // on/off toggle (remembered where storage allows)
+  function setOn(v, save){
+    document.body.classList.toggle('icons-off', !v);
+    btn.setAttribute('aria-pressed', String(v));
+    btn.setAttribute('aria-label', 'Background icons: ' + (v?'on':'off'));
+    v ? start() : stop();
+    if(save){ try{ localStorage.setItem('bgIcons', v?'1':'0'); }catch(e){} }
+  }
+  btn.addEventListener('click', ()=> setOn(!on, true));
+
+  resize(true);
+  let pref = true; try{ pref = localStorage.getItem('bgIcons') !== '0'; }catch(e){}
+  setOn(pref, false);
+})();
+</script>
+</body>
+</html>
