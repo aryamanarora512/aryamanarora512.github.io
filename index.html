@@ -340,7 +340,7 @@
 
     <nav class="links" aria-label="Links">
       <a href="#" data-soon>Resume</a>
-      <a href="#" data-soon>GitHub</a>
+      <a href="https://github.com/aryamanarora512" target="_blank" rel="noopener">GitHub</a>
       <a href="#" data-soon>LinkedIn</a>
       <button type="button" id="copyEmail">Copy email</button>
     </nav>
@@ -515,7 +515,7 @@ document.querySelectorAll('[data-soon]').forEach(a=>a.addEventListener('click',e
   const b = document.getElementById(id); if(!b) return;
   const label = b.textContent;
   b.addEventListener('click', async ()=>{
-    try{ await navigator.clipboard.writeText('your-email@example.com'); }catch(e){}
+    try{ await navigator.clipboard.writeText('aryamanaurora@icloud.com'); }catch(e){}
     b.textContent = 'Email copied';
     setTimeout(()=>b.textContent = label, 1600);
   });
