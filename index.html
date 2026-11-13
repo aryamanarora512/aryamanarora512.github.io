@@ -503,7 +503,7 @@ document.querySelectorAll('[data-soon]').forEach(a=>a.addEventListener('click',e
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const STEP = 40;                     // arrow spacing: one per grid cell
-  const ARROW = 'rgba(150,156,166,';   // muted gray, sits back from the text
+  const ARROW = 'rgba(120,126,136,';   // muted gray, sits back from the text
   const ANG = -0.5;                    // rotation of the saddle's axes (radians)
   const cosA = Math.cos(ANG), sinA = Math.sin(ANG);
   let W=0, H=0, DPR=1, on=true, rafId=0, t=0, last=0;
@@ -551,7 +551,7 @@ document.querySelectorAll('[data-soon]').forEach(a=>a.addEventListener('click',e
         const e = Math.min(gx - column.l, column.r - gx);          // dim a little over the text column
         const q = Math.max(0, Math.min(1, (e + 30)/70));
         const dim = 1 - (W < 700 ? .6 : .78) * (q*q*(3-2*q));
-        arrow(gx, gy, fx, fy, (.55*dim).toFixed(3));
+        arrow(gx, gy, fx, fy, (.4*dim).toFixed(3));
       }
     }
   }
