@@ -551,7 +551,7 @@ document.querySelectorAll('[data-soon]').forEach(a=>a.addEventListener('click',e
         const e = Math.min(gx - column.l, column.r - gx);          // dim a little over the text column
         const q = Math.max(0, Math.min(1, (e + 30)/70));
         const dim = 1 - (W < 700 ? .6 : .78) * (q*q*(3-2*q));
-        arrow(gx, gy, fx, fy, (.4*dim).toFixed(3));
+        arrow(gx, gy, fx, fy, (.2*dim).toFixed(3));
       }
     }
   }
