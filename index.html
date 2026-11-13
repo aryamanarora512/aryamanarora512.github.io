@@ -502,8 +502,8 @@ document.querySelectorAll('[data-soon]').forEach(a=>a.addEventListener('click',e
   const btn = document.getElementById('toggleBg');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const STEP = 80;                     // arrow spacing: every other grid intersection
-  const ARROW = 'rgba(205,210,218,';   // light gray
+  const STEP = 40;                     // arrow spacing: one per grid cell
+  const ARROW = 'rgba(150,156,166,';   // muted gray, sits back from the text
   const ANG = -0.5;                    // rotation of the saddle's axes (radians)
   const cosA = Math.cos(ANG), sinA = Math.sin(ANG);
   let W=0, H=0, DPR=1, on=true, rafId=0, t=0, last=0;
@@ -530,14 +530,14 @@ document.querySelectorAll('[data-soon]').forEach(a=>a.addEventListener('click',e
 
   function arrow(x, y, fx, fy, alpha){
     const mag = Math.hypot(fx, fy); if(mag < 0.5) return;
-    const L = 36 * Math.tanh(mag / 150);            // length grows with distance, then saturates
-    if(L < 2) return;
+    const L = 21 * Math.tanh(mag / 120);            // length grows with distance, then saturates
+    if(L < 1.5) return;
     const ux = fx/mag, uy = fy/mag;
     const x0 = x - ux*L/2, y0 = y - uy*L/2, x1 = x + ux*L/2, y1 = y + uy*L/2;
-    const head = Math.min(9, L*.45), hw = head*.5;
+    const head = Math.min(5.5, L*.42), hw = head*.5;
     const bx = x1 - ux*head, by = y1 - uy*head;
     ctx.strokeStyle = ctx.fillStyle = ARROW + alpha + ')';
-    ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+    ctx.lineWidth = 1.1; ctx.lineCap = 'round';
     ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(bx, by); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(x1, y1);
     ctx.lineTo(bx - uy*hw, by + ux*hw); ctx.lineTo(bx + uy*hw, by - ux*hw); ctx.closePath(); ctx.fill();
@@ -551,7 +551,7 @@ document.querySelectorAll('[data-soon]').forEach(a=>a.addEventListener('click',e
         const e = Math.min(gx - column.l, column.r - gx);          // dim a little over the text column
         const q = Math.max(0, Math.min(1, (e + 30)/70));
         const dim = 1 - (W < 700 ? .6 : .78) * (q*q*(3-2*q));
-        arrow(gx, gy, fx, fy, (.72*dim).toFixed(3));
+        arrow(gx, gy, fx, fy, (.55*dim).toFixed(3));
       }
     }
   }
