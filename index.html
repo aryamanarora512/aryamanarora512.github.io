@@ -275,51 +275,30 @@
     .card.featured .thumb.two{aspect-ratio:auto;grid-template-columns:1fr}
     .thumb.two img{height:auto}
   }
+
+  /* vector field + bloom */
+  #bg{transition:opacity .4s}
+  #bloom{position:fixed;left:0;top:0;width:520px;height:520px;z-index:20;pointer-events:none;opacity:0;
+    border-radius:50%;will-change:transform,opacity;
+    background:radial-gradient(circle, rgba(255,255,255,.075) 0%, rgba(255,255,255,.035) 32%, rgba(255,255,255,0) 68%)}
+  @media (hover:none){#bloom{display:none}}
+  .plist{list-style:none;margin-top:44px;display:grid;gap:14px}
+  .plist li{position:relative;padding-left:22px;font-size:18px;line-height:1.45;color:var(--ink)}
+  .plist li::before{content:"";position:absolute;left:2px;top:.68em;width:4px;height:4px;border-radius:50%;background:var(--ink-3)}
+  .plist li span{color:var(--ink-3);margin-left:.6em}
+  .plist li span::before{content:"";}
 </style>
 </head>
 <body>
 
 <!-- Icon sprite: single source of truth. The page uses these as <svg><use>, and the background canvas reads the same paths. -->
 <svg id="sprite" width="0" height="0" style="position:absolute" aria-hidden="true">
-  <!-- endurance -->
-  <symbol id="i-swim" viewBox="0 0 24 24"><path d="M3 15c1.5-1.2 3-1.2 4.5 0s3 1.2 4.5 0 3-1.2 4.5 0 3 1.2 4.5 0"/><path d="M3 19.5c1.5-1.2 3-1.2 4.5 0s3 1.2 4.5 0 3-1.2 4.5 0 3 1.2 4.5 0"/><path d="M14.6 6.6a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0 -3.4 0"/><path d="M5 12.2l4.4-3.8 3.4 1.8 2.2-2"/></symbol>
-  <symbol id="i-bike" viewBox="0 0 24 24"><path d="M2 16.5a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0"/><path d="M15 16.5a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0"/><path d="M5.5 16.5L9 8.5h6.5l3 8"/><path d="M9 8.5l3.5 8"/><path d="M8 6.5h2.5"/></symbol>
-  <symbol id="i-run" viewBox="0 0 24 24"><path d="M14.4 4.6a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0 -3.4 0"/><path d="M15 9.6l-3.2 3 3 2.6-1.1 5"/><path d="M11.8 12.6L8 11.6l-1.6 2.3"/><path d="M15 9.6l3.1 2.4 2.2-.9"/><path d="M13.8 15.2l3.7 1.4.8 2.6"/></symbol>
-  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12.5h4.5l2.2-6 3.6 11.5 2.6-8 1.8 2.5H22"/></symbol>
-  <symbol id="i-stopwatch" viewBox="0 0 24 24"><path d="M5 13.5a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M12 13.5V10"/><path d="M10 2.5h4"/><path d="M12 2.5v3.5"/><path d="M18 6l1.2-1.2"/></symbol>
-  <symbol id="i-mountain" viewBox="0 0 24 24"><path d="M2.5 19.5l6-10 3.5 5.5 2.5-3.5 7 8z"/></symbol>
-  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.2 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></symbol>
-  <!-- strength -->
-  <symbol id="i-barbell" viewBox="0 0 24 24"><path d="M6.5 7v10"/><path d="M3.5 9.5v5"/><path d="M17.5 7v10"/><path d="M20.5 9.5v5"/><path d="M6.5 12h11"/></symbol>
-  <symbol id="i-kettlebell" viewBox="0 0 24 24"><path d="M6 15a6 6 0 1 0 12 0a6 6 0 1 0 -12 0"/><path d="M8.5 10.6V8a3.5 3.5 0 0 1 7 0v2.6"/></symbol>
-  <symbol id="i-plate" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></symbol>
-  <!-- math -->
-  <symbol id="i-sigma" viewBox="0 0 24 24"><path d="M18 5H7l6 7-6 7h11"/></symbol>
-  <symbol id="i-pi" viewBox="0 0 24 24"><path d="M5 7.5h14"/><path d="M9 7.5c0 4-.5 8-2 11"/><path d="M15 7.5v9.5c0 1 .8 1.8 2 1.8"/></symbol>
-  <symbol id="i-integral" viewBox="0 0 24 24"><path d="M14.5 4.5c-2 0-3 1-3 3.2v8.6c0 2.2-1 3.2-3 3.2"/></symbol>
-  <symbol id="i-infinity" viewBox="0 0 24 24"><path d="M12 12c-1.8-2.6-3.4-3.8-5.2-3.8a3.8 3.8 0 0 0 0 7.6c1.8 0 3.4-1.2 5.2-3.8s3.4-3.8 5.2-3.8a3.8 3.8 0 0 1 0 7.6c-1.8 0-3.4-1.2-5.2-3.8"/></symbol>
-  <symbol id="i-sqrt" viewBox="0 0 24 24"><path d="M3 12.5l2.5-1.2 3.2 7.2L14 4.5h7"/></symbol>
-  <symbol id="i-sine" viewBox="0 0 24 24"><path d="M2 12c2-7 4-7 6 0s4 7 6 0 4-7 6 0"/></symbol>
-  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9.5 3h5"/><path d="M10.5 3v6l-5 8.5a2 2 0 0 0 1.7 3h9.6a2 2 0 0 0 1.7-3l-5-8.5V3"/><path d="M8 14h8"/></symbol>
-  <!-- code -->
-  <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M13.5 5l-3 14"/></symbol>
-  <symbol id="i-braces" viewBox="0 0 24 24"><path d="M8.5 4.5c-2 0-3 1-3 3v2c0 1.2-.8 2-2 2.5 1.2.5 2 1.3 2 2.5v2c0 2 1 3 3 3"/><path d="M15.5 4.5c2 0 3 1 3 3v2c0 1.2.8 2 2 2.5-1.2.5-2 1.3-2 2.5v2c0 2-1 3-3 3"/></symbol>
-  <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M4 7l5 5-5 5"/><path d="M12 18h8"/></symbol>
-  <symbol id="i-chip" viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/></symbol>
-  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M8 3h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M10.5 18h3"/></symbol>
-  <symbol id="i-graph" viewBox="0 0 24 24"><path d="M3.4 6a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M3.4 18a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M10.4 12a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M17.4 6a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M17.4 18a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0 -3.2 0"/><path d="M6.3 7.1l4.2 3.8M6.3 16.9l4.2-3.8M13.5 11l4.2-3.8M13.5 13l4.2 3.8"/></symbol>
-  <symbol id="i-branch" viewBox="0 0 24 24"><path d="M3.5 18a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"/><path d="M15.5 6a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"/><path d="M6 3.5v12"/><path d="M18 8.5c0 5-6 4-12 7"/></symbol>
-  <symbol id="i-database" viewBox="0 0 24 24"><path d="M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3z"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
-  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 4v16h18"/><path d="M7 15c3-.5 4-6 7.5-7s4.5 3 6 2.5"/></symbol>
-  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.5A8 8 0 1 1 9.5 4.5a6.5 6.5 0 0 0 10 10z"/></symbol>
-  <!-- ui -->
-  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></symbol>
-  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><path d="M9.5 12a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0"/></symbol>
-  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.7A9.6 9.6 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a16 16 0 0 1-2.6 3.3M6.2 7.2A16 16 0 0 0 2.5 12S6 18.5 12 18.5a9.6 9.6 0 0 0 4-.9"/><path d="M9.9 9.9a2.5 2.5 0 0 0 3.2 3.2"/></symbol>
+  <symbol id="i-graph" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16M7 7l10 10M17 7L7 17"/></symbol>
 </svg>
 
 <div class="grid" aria-hidden="true"></div>
 <canvas id="bg" aria-hidden="true"></canvas>
+<div id="bloom" aria-hidden="true"></div>
 
 <main class="wrap">
 
@@ -327,7 +306,7 @@
   <div class="toprow">
     <div class="avatar"><img src="assets/aryaman.webp" alt="Aryaman Arora" width="76" height="76"></div>
     <nav class="controls" aria-label="Primary">
-      <button class="icon-btn" id="toggleBg" aria-pressed="true" aria-label="Background icons: on" title="Background icons">
+      <button class="icon-btn" id="toggleBg" aria-pressed="true" aria-label="Background vectors: on" title="Background vectors">
         <svg class="ic"><use href="#i-graph"/></svg>
       </button>
     </nav>
@@ -345,6 +324,14 @@
       <button type="button" id="copyEmail">Copy email</button>
     </nav>
 
+
+    <ul class="plist" aria-label="Projects">
+      <li>Python firm sourcing tool<span>Legal Enterprises of America</span></li>
+      <li>LLM compression and RAG agent<span>Hickey Lab</span></li>
+      <li>EV fleet charging planner<span>Chargeplan</span></li>
+      <li>Solar site assessment tools<span>Selco Foundation</span></li>
+      <li>Multisport Analytics Platform<span>Baseline</span></li>
+    </ul>
     </header>
 
   <!-- right now -->
@@ -368,11 +355,11 @@
         <p class="desc">A research assistant for a collection of T-cell documents. It extracts text from PDFs, spreadsheets, slides and Word files, embeds the chunks with a MiniLM sentence model, and stores them in a FAISS index. A question pulls the five closest passages into a prompt, and a language model served locally through Ollama answers with the source file and chunk named; every query is logged. A scope-plan-answer-review prompt keeps longer outputs, such as grant drafts, structured. A separate pipeline compresses model weights to 4 bits to cut inference cost and memory use.</p>
       </a>
       <a class="card" href="#" data-soon>
-        <div class="thumb ph"><span>Image goes here</span></div>
-        <h3>Client onboarding data pipeline</h3>
-        <div class="role">Data Analytics Intern at Big Idea Technologies</div>
-        <div class="date">May – Jul 2025</div>
-        <p class="desc">Description coming soon.</p>
+        <div class="thumb"><img src="assets/chargeplan-wireframe.jpg" alt="Wireframe of the planner: setup on the left, verdict, cost and charging chart on the right" loading="lazy"></div>
+        <h3>EV fleet charging planner</h3>
+        <div class="role">Selco Foundation extended project</div>
+        <div class="date">2026</div>
+        <p class="desc">A Python engine that schedules EV charging to minimize modeled energy cost while every vehicle leaves on time and the fleet stays under a shared power limit. A React and FastAPI app turns vehicle requirements and electricity tariffs into charging schedules, readiness summaries and an interactive chart. In the sample run, both vans are ready by departure for $4.80 instead of $12.00 when charging on arrival. Scenario analysis shows how prices, charge capacity and departure times change fleet readiness.</p>
       </a>
       <div class="card featured">
         <div class="thumb two"><img src="assets/selco-site-ranking.png" alt="Ranked bar chart of 15 candidate sites by predicted solar potential, with feature importances (synthetic sample data)" loading="lazy"><img src="assets/selco-outreach.jpg" alt="A solar dryer, a solar-powered milking machine, and a battery and inverter setup" loading="lazy"></div>
@@ -473,20 +460,6 @@ fig.savefig(&quot;solar_site_ranking.png&quot;, dpi=200, bbox_inches=&quot;tight
 </code></pre></details>
       </div>
       <a class="card" href="#" data-soon>
-        <div class="thumb"><img src="assets/chargeplan-wireframe.jpg" alt="Wireframe of the planner: setup on the left, verdict, cost and charging chart on the right" loading="lazy"></div>
-        <h3>EV fleet charging planner</h3>
-        <div class="role">Selco Foundation extended project</div>
-        <div class="date">2026</div>
-        <p class="desc">A Python engine that schedules EV charging to minimize modeled energy cost while every vehicle leaves on time and the fleet stays under a shared power limit. A React and FastAPI app turns vehicle requirements and electricity tariffs into charging schedules, readiness summaries and an interactive chart. In the sample run, both vans are ready by departure for $4.80 instead of $12.00 when charging on arrival. Scenario analysis shows how prices, charge capacity and departure times change fleet readiness.</p>
-      </a>
-      <a class="card" href="#" data-soon>
-        <div class="thumb ph"><span>Image goes here</span></div>
-        <h3>Systematic Trading Engine </h3>
-        <div class="role">Duke FinTech Society</div>
-        <div class="date">Jan 2026</div>
-        <p class="desc">Description coming soon.</p>
-      </a>
-      <a class="card" href="#" data-soon>
         <div class="thumb ph"><span>Image goes here</span></div>
         <h3>Multisport Analytics Platform</h3>
         <div class="role">Baseline</div>
@@ -521,149 +494,107 @@ document.querySelectorAll('[data-soon]').forEach(a=>a.addEventListener('click',e
   });
 });
 
-/* ---------- the icon sky ---------- */
+/* ---------- vector field: zero at the cursor, a saddle flow around it ---------- */
 (function(){
   const canvas = document.getElementById('bg');
   const ctx = canvas.getContext('2d');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const bloom = document.getElementById('bloom');
   const btn = document.getElementById('toggleBg');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const RGB = {
-    endurance:[91,141,239], strength:[91,141,239], math:[91,141,239], code:[91,141,239]
-  };
-  const REST = [150,158,172];
-  const CATS = {
-    endurance:['swim','bike','run','pulse','stopwatch','mountain','heart'],
-    strength:['barbell','kettlebell','plate','barbell','kettlebell'],
-    math:['sigma','pi','integral','infinity','sqrt','sine','flask'],
-    code:['code','braces','terminal','chip','phone','graph','branch','database','chart','moon']
-  };
+  const STEP = 80;                     // arrow spacing: every other grid intersection
+  const ARROW = 'rgba(205,210,218,';   // light gray
+  const ANG = -0.5;                    // rotation of the saddle's axes (radians)
+  const cosA = Math.cos(ANG), sinA = Math.sin(ANG);
+  let W=0, H=0, DPR=1, on=true, rafId=0, t=0, last=0;
+  let column = {l:0, r:0};
+  const ptr = {x:0, y:0, seen:false};
+  const cur = {x:0, y:0, k:0};         // eased field center
+  const bl  = {x:-999, y:-999, a:0};   // eased bloom position and strength
 
-  // Build shapes from the sprite so the page and the canvas share one set of paths.
-  const shapes = [];
-  for(const cat in CATS){
-    for(const id of CATS[cat]){
-      const sym = document.getElementById('i-'+id);
-      if(!sym) continue;
-      const paths = [...sym.querySelectorAll('path')].map(p=>new Path2D(p.getAttribute('d')));
-      shapes.push({cat, paths, rgb:RGB[cat]});
-    }
-  }
-
-  let W=0,H=0,DPR=1, icons=[], on=true, rafId=0, t=0, last=0;
-  let column = {l:0, r:0};               // content column bounds: icons dim a little over the text
-  const ptr = {x:-1e4,y:-1e4,seen:false,down:false};
-  const cur = {x:0,y:0,s:0};            // smoothed spotlight
-  const rand = (a,b)=>a+Math.random()*(b-a);
-
-  function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
-
-  function resize(force){
-    const nw = innerWidth, nh = innerHeight;
-    const bigChange = force || Math.abs(nw-W)>2 || Math.abs(nh-H)>160;
-    DPR = Math.min(2, devicePixelRatio||1);
-    W = nw; H = nh;
+  function resize(){
+    DPR = Math.min(2, devicePixelRatio||1); W = innerWidth; H = innerHeight;
     canvas.width = Math.round(W*DPR); canvas.height = Math.round(H*DPR);
     ctx.setTransform(DPR,0,0,DPR,0,0);
     const wr = document.querySelector('.wrap').getBoundingClientRect();
     column = {l:wr.left, r:wr.right};
-    if(bigChange) seed();
+    if(!ptr.seen){ cur.x = W*.62; cur.y = H*.4; }
   }
 
-  function seed(){
-    const n = Math.max(46, Math.min(96, Math.round(W*H/17000)));
-    const bag = shuffle(shapes.slice());
-    icons = [];
-    for(let i=0;i<n;i++){
-      let x,y,tries=0;
-      do{ x=rand(0,W); y=rand(0,H); tries++; }
-      while(tries<30 && icons.some(o=>Math.hypot(o.x-x,o.y-y)<74));
-      const depth = rand(.6,1.5);
-      icons.push({
-        shape: bag[i % bag.length],
-        x, y, depth,
-        size: 19 + depth*10,
-        vx: rand(-4,4)*depth, vy: rand(-9,-3)*depth,   // px/s, drifting gently upward
-        rot: rand(-.5,.5), vr: rand(-.06,.06),
-        ph: rand(0,6.28), tw: rand(.4,1.1)
-      });
-    }
+  // v(r) = R diag(+1, -1) R^T r : stretches along one axis, compresses along the other, zero at r = 0
+  function field(dx, dy){
+    const u =  cosA*dx + sinA*dy, v = -sinA*dx + cosA*dy;
+    const fu = u, fv = -v;
+    return [cosA*fu - sinA*fv, sinA*fu + cosA*fv];
   }
 
-  function draw(p){
-    ctx.clearRect(0,0,W,H);
-    const R = 230;
-    const sy = reduce ? 0 : scrollY;
-    const lit = [];
-    for(const o of icons){
-      const wrap = H+80;
-      let dy = ((o.y - sy*.14*o.depth) % wrap + wrap) % wrap - 40;
-      const d = Math.hypot(o.x-cur.x, dy-cur.y);
-      let k = Math.max(0, 1 - d/R); k = k*k*(3-2*k) * cur.s;      // smoothstep
-      // dim resting icons over the text column (smoothly, so nothing pops as it drifts)
-      const edge = Math.min(o.x-column.l, column.r-o.x);
-      const q = Math.max(0, Math.min(1, (edge+30)/70));
-      const dim = 1 - (W<700 ? .3 : .5) * (q*q*(3-2*q));
-      const base = (.2 + (reduce?0:.07*Math.sin(o.ph + t*o.tw))) * dim;
-      const a = Math.min(.62, base + k*.62);
-      const mix = k;
-      const c = o.shape.rgb;
-      const col = `rgba(${Math.round(REST[0]+(c[0]-REST[0])*mix)},${Math.round(REST[1]+(c[1]-REST[1])*mix)},${Math.round(REST[2]+(c[2]-REST[2])*mix)},${a})`;
-      const s = o.size * (1 + k*.28);
-      if(k>.08) lit.push({x:o.x,y:dy,k,c});
-      ctx.save();
-      ctx.translate(o.x, dy);
-      ctx.rotate(o.rot);
-      const sc = s/24;
-      ctx.scale(sc,sc);
-      ctx.translate(-12,-12);
-      ctx.lineWidth = 1.5/sc;
-      ctx.lineCap='round'; ctx.lineJoin='round';
-      ctx.strokeStyle = col;
-      for(const path of o.shape.paths) ctx.stroke(path);
-      ctx.restore();
+  function arrow(x, y, fx, fy, alpha){
+    const mag = Math.hypot(fx, fy); if(mag < 0.5) return;
+    const L = 36 * Math.tanh(mag / 150);            // length grows with distance, then saturates
+    if(L < 2) return;
+    const ux = fx/mag, uy = fy/mag;
+    const x0 = x - ux*L/2, y0 = y - uy*L/2, x1 = x + ux*L/2, y1 = y + uy*L/2;
+    const head = Math.min(9, L*.45), hw = head*.5;
+    const bx = x1 - ux*head, by = y1 - uy*head;
+    ctx.strokeStyle = ctx.fillStyle = ARROW + alpha + ')';
+    ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(bx, by); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1, y1);
+    ctx.lineTo(bx - uy*hw, by + ux*hw); ctx.lineTo(bx + uy*hw, by - ux*hw); ctx.closePath(); ctx.fill();
+  }
+
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    for(let gy = STEP/2; gy < H + STEP; gy += STEP){
+      for(let gx = STEP/2; gx < W + STEP; gx += STEP){
+        const [fx, fy] = field(gx - cur.x, gy - cur.y);
+        const e = Math.min(gx - column.l, column.r - gx);          // dim a little over the text column
+        const q = Math.max(0, Math.min(1, (e + 30)/70));
+        const dim = 1 - (W < 700 ? .6 : .78) * (q*q*(3-2*q));
+        arrow(gx, gy, fx, fy, (.72*dim).toFixed(3));
+      }
     }
   }
 
   function tick(now){
-    const dt = Math.min(.05,(now-last)/1000||0); last = now; t += dt;
-    // spotlight target: the pointer if we've seen one, otherwise a slow ghost wandering the page
-    let tx, ty, ts;
-    if(ptr.seen){ tx=ptr.x; ty=ptr.y; ts=1; }
-    else{ tx = W*(.5+.36*Math.sin(t*.21)); ty = H*(.46+.3*Math.sin(t*.29+1.2)); ts=.8; }
-    const e = 1 - Math.pow(.0008, dt);
-    cur.x += (tx-cur.x)*e; cur.y += (ty-cur.y)*e; cur.s += (ts-cur.s)*e;
-    if(!reduce){
-      for(const o of icons){
-        o.x += o.vx*dt; o.y += o.vy*dt; o.rot += o.vr*dt;
-        if(o.x<-30) o.x=W+30; if(o.x>W+30) o.x=-30;
-        if(o.y<-30) o.y=H+30; if(o.y>H+30) o.y=-30;   // wrapped in draw() too, for scroll parallax
-      }
+    const dt = Math.min(.05, (now-last)/1000 || 0); last = now; t += dt;
+    let tx, ty;
+    if(ptr.seen){ tx = ptr.x; ty = ptr.y; }
+    else{ // no cursor yet (or touch): the field's center drifts slowly on its own
+      const k = reduce ? 0 : t;
+      tx = W*(.55 + .3*Math.sin(k*.17)); ty = H*(.45 + .28*Math.sin(k*.23 + 1.1));
     }
-    draw();
-    if(on) rafId = requestAnimationFrame(tick);
+    const e = 1 - Math.pow(.0005, dt);
+    cur.x += (tx-cur.x)*e; cur.y += (ty-cur.y)*e;
+    // bloom: only for a real cursor, eased so it trails slightly
+    bl.x += (ptr.x-bl.x)*e; bl.y += (ptr.y-bl.y)*e;
+    bl.a += ((ptr.seen?1:0)-bl.a)*(1 - Math.pow(.003, dt));
+    bloom.style.opacity = bl.a.toFixed(3);
+    bloom.style.transform = `translate3d(${bl.x-260}px,${bl.y-260}px,0)`;
+    if(on) draw();
+    rafId = requestAnimationFrame(tick);
   }
 
-  function start(){ on=true; last=performance.now(); cancelAnimationFrame(rafId); rafId=requestAnimationFrame(tick); }
-  function stop(){ on=false; cancelAnimationFrame(rafId); }
+  addEventListener('pointermove', e=>{
+    if(e.pointerType === 'touch') return;
+    if(!ptr.seen){ bl.x = e.clientX; bl.y = e.clientY; }
+    ptr.x = e.clientX; ptr.y = e.clientY; ptr.seen = true;
+  }, {passive:true});
+  document.documentElement.addEventListener('pointerleave', ()=>{ ptr.seen = false; });
+  let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt = setTimeout(resize, 120); });
 
-  addEventListener('pointermove', e=>{ ptr.x=e.clientX; ptr.y=e.clientY; ptr.seen=true; }, {passive:true});
-  document.documentElement.addEventListener('pointerleave', ()=>{ ptr.seen=false; });
-  let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>resize(false),120); });
-
-  // on/off toggle (remembered where storage allows)
   function setOn(v, save){
-    document.body.classList.toggle('icons-off', !v);
+    on = v; canvas.style.opacity = v ? 1 : 0;
     btn.setAttribute('aria-pressed', String(v));
-    btn.setAttribute('aria-label', 'Background icons: ' + (v?'on':'off'));
-    v ? start() : stop();
-    if(save){ try{ localStorage.setItem('bgIcons', v?'1':'0'); }catch(e){} }
+    btn.setAttribute('aria-label', 'Background vectors: ' + (v?'on':'off'));
+    if(save){ try{ localStorage.setItem('bgField', v?'1':'0'); }catch(e){} }
   }
   btn.addEventListener('click', ()=> setOn(!on, true));
 
-  resize(true);
-  let pref = true; try{ pref = localStorage.getItem('bgIcons') !== '0'; }catch(e){}
+  resize();
+  let pref = true; try{ pref = localStorage.getItem('bgField') !== '0'; }catch(e){}
   setOn(pref, false);
+  last = performance.now(); rafId = requestAnimationFrame(tick);
 })();
 </script>
 </body>
